@@ -2,6 +2,8 @@
 Factory that returns the corrent LLM Client configurations.
 """
 
+from .openrouter_dialog import OpenRouterDiaglog
+from .openrouter_client import OpenRouterClient
 from .claude_client import ClaudeClient
 from .claude_dialog import ClaudeDialog
 from .deepseek_client import DeepseekClient
@@ -24,7 +26,7 @@ class ClientFactory:
     Factory that returns the corrent LLM Client configurations.
     """
 
-    valid_clients = ["Claude", "OpenAI", "DeepSeek", "Gemini"]
+    valid_clients = ["Claude", "OpenAI", "DeepSeek", "Gemini", "OpenRouter"]
 
     def __init__(self, browser):
         self.app_settings, self.client_name = get_settings()
@@ -52,6 +54,9 @@ class ClientFactory:
         if self.client_name == "DeepSeek":
             llm_client = DeepseekClient(prompt_config)
             return llm_client
+        if self.client_name == "OpenRouter":
+            llm_client = OpenRouterClient(prompt_config)
+            return llm_client
         if self.client_name == "Claude":
             llm_client = ClaudeClient(prompt_config)
             return llm_client
@@ -69,6 +74,8 @@ class ClientFactory:
             return OpenAIDialog(self.app_settings, self.notes)
         if self.client_name == "DeepSeek":
             return DeepSeekDialog(self.app_settings, self.notes)
+        if self.client_name == "OpenRouter":
+            return OpenRouterDiaglog(self.app_settings, self.notes)
         if self.client_name == "Claude":
             return ClaudeDialog(self.app_settings, self.notes)
         if self.client_name == "Gemini":

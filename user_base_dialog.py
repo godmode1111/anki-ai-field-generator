@@ -51,7 +51,7 @@ class UserBaseDialog(QWidget, metaclass=MyMeta):
         left_layout.setContentsMargins(0, 0, 0, 0)
         left_container.setLayout(left_layout)
 
-        self.add_models_dropdown(left_layout)
+        self.add_models_dropdown(left_layout, True if self.service_name == "OpenRouter" else False)
         self.add_api_key(left_layout)
         self.add_system_prompt(
             left_layout, self.system_prompt_description, self.system_prompt_placeholder
@@ -121,7 +121,7 @@ class UserBaseDialog(QWidget, metaclass=MyMeta):
 
     @property
     @abstractmethod
-    def models(self) -> list[str]:
+    def models(self):
         """Array of the names of the available models"""
 
     @property
@@ -153,10 +153,15 @@ class UserBaseDialog(QWidget, metaclass=MyMeta):
         <pre>exampleSentence de_sentence<br>translation en_sentence</pre>
         """
 
-    def add_models_dropdown(self, layout):
+    def add_models_dropdown(self, layout, openrouter):
         layout.addWidget(self.ui_tools.create_label("Model Name:"))
-        layout.addWidget(
-            self.ui_tools.create_dropdown(SettingsNames.MODEL_SETTING_NAME, self.models)
+        if openrouter == True:
+            layout.addWidget(
+            self.ui_tools.create_text_entry(SettingsNames.MODEL_SETTING_NAME)
+            )
+        else:
+            layout.addWidget(
+                self.ui_tools.create_dropdown(SettingsNames.MODEL_SETTING_NAME, self.models)
         )
 
     def add_api_key(self, layout):
