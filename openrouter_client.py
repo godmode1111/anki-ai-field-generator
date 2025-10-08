@@ -38,16 +38,11 @@ class OpenRouterClient(LLMClient):
         data = {
             "model": self.prompt_config.model,
             "messages": [
+                {"role": "system", "content": self.prompt_config.system_prompt},
                 {"role": "user", "content": user_input},
             ],
-            "response_format": get_openai_response_format(
-                self.prompt_config.response_keys
-            ),
+            "response_format": {"type": "json_object"},
         }
-        if not self.prompt_config.model.startswith("o"):
-            data["messages"].insert(
-                0, {"role": "system", "content": self.prompt_config.system_prompt}
-            )
 
         self.wait_if_needed()
 
